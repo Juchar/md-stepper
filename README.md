@@ -4,7 +4,7 @@ Material Design Stepper is a UI component add-on for Vaadin 7 that implements a 
 
 ## Online demo
 
-Try the add-on demo at <url of the online demo>
+Try the add-on demo at [https://md-stepper-demo.herokuapp.com/](https://md-stepper-demo.herokuapp.com/).
 
 ## Download release
 
@@ -12,10 +12,10 @@ Official releases of this add-on are available at Vaadin Directory. For Maven in
 
 ## Building and running demo
 
-git clone <url of the Stepper repository>
-mvn clean install
-cd demo
-mvn jetty:run
+git clone https://github.com/Juchar/md-stepper  
+mvn clean install  
+cd demo  
+mvn jetty:run  
 
 To see the demo, navigate to http://localhost:8080/
 
