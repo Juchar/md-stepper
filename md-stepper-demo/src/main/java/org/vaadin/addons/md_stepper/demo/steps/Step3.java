@@ -46,7 +46,6 @@ public class Step3 extends Step {
           currentUi.access(() -> {
             stepper.hideFeedbackMessage();
             stepper.next();
-            currentUi.push();
           });
         }
       }, 2000);
