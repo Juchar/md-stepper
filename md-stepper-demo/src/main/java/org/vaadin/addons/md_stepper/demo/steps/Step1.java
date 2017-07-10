@@ -1,7 +1,7 @@
 package org.vaadin.addons.md_stepper.demo.steps;
 
 import com.vaadin.server.Sizeable;
-import com.vaadin.shared.ui.label.ContentMode;
+import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
@@ -38,6 +38,7 @@ public class Step1 extends Step {
     content.addComponent(basicInformationLabel);
     content.addComponent(demoUsageTitle);
     content.addComponent(demoUsageLabel);
+    content.iterator().forEachRemaining(c -> c.setWidth(100, Unit.PERCENTAGE));
 
     setCaption("Step 1");
     setDescription("Basic Stepper Features");

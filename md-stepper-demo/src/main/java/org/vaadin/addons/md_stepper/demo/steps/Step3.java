@@ -1,7 +1,7 @@
 package org.vaadin.addons.md_stepper.demo.steps;
 
 import com.vaadin.server.Sizeable;
-import com.vaadin.shared.ui.label.ContentMode;
+import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
@@ -30,17 +30,22 @@ public class Step3 extends Step {
 
     content.addComponent(feedbackTitle);
     content.addComponent(stepFeedbackLabel);
+    content.iterator().forEachRemaining(c -> c.setWidth(100, Unit.PERCENTAGE));
 
     addStepBackListener(StepperActions::back);
     addStepNextListener(event -> {
       Stepper stepper = event.getSource();
       stepper.showFeedbackMessage("Long loading operation is being performed");
 
+      UI currentUi = UI.getCurrent();
+
       new Timer().schedule(new TimerTask() {
 
         @Override
         public void run() {
-          UI.getCurrent().access(() -> {
+          stepper.hideFeedbackMessage();
+          stepper.next();
+          currentUi.access(() -> {
             stepper.hideFeedbackMessage();
             stepper.next();
           });

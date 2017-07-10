@@ -1,8 +1,8 @@
 package org.vaadin.addons.md_stepper.demo.steps;
 
-import com.vaadin.server.FontAwesome;
+import com.vaadin.icons.VaadinIcons;
 import com.vaadin.server.Sizeable;
-import com.vaadin.shared.ui.label.ContentMode;
+import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
@@ -34,11 +34,12 @@ public class Step2 extends Step {
 
     content.addComponent(stepAttributesTitle);
     content.addComponent(stepAttributesLabel);
+    content.iterator().forEachRemaining(c -> c.setWidth(100, Unit.PERCENTAGE));
 
     setCaption("Step 2");
     setDescription("Step Attributes");
     setContent(content);
-    setIcon(FontAwesome.BAR_CHART);
+    setIcon(VaadinIcons.BAR_CHART);
     setOptional(true);
     setEditable(true);
   }

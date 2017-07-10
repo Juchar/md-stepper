@@ -1,7 +1,7 @@
 package org.vaadin.addons.md_stepper.demo.steps;
 
 import com.vaadin.server.Sizeable;
-import com.vaadin.shared.ui.label.ContentMode;
+import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
@@ -30,6 +30,7 @@ public class Step4 extends Step {
 
     content.addComponent(errorTitle);
     content.addComponent(errorLabel);
+    content.iterator().forEachRemaining(c -> c.setWidth(100, Unit.PERCENTAGE));
     content.addComponent(textField);
 
     addStepBackListener(StepperActions::back);
