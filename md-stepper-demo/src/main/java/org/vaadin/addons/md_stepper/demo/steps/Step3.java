@@ -43,8 +43,6 @@ public class Step3 extends Step {
 
         @Override
         public void run() {
-          stepper.hideFeedbackMessage();
-          stepper.next();
           currentUi.access(() -> {
             stepper.hideFeedbackMessage();
             stepper.next();

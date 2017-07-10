@@ -6,6 +6,7 @@ import com.vaadin.annotations.Title;
 import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
+import com.vaadin.shared.communication.PushMode;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.GridLayout;
@@ -19,6 +20,7 @@ import javax.servlet.annotation.WebServlet;
 
 @Theme("default")
 @Title("Stepper Add-on Demo")
+@Push(PushMode.MANUAL)
 @SuppressWarnings("serial")
 public class DemoUI extends UI implements StepperPropertiesLayout.StepperCreateListener {
 
