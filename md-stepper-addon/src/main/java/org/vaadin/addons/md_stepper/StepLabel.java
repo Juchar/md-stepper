@@ -1,10 +1,11 @@
 package org.vaadin.addons.md_stepper;
 
 import com.vaadin.event.LayoutEvents;
-import com.vaadin.server.FontAwesome;
+import com.vaadin.icons.VaadinIcons;
 import com.vaadin.server.FontIcon;
 import com.vaadin.server.Resource;
-import com.vaadin.shared.ui.label.ContentMode;
+import com.vaadin.shared.Registration;
+import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CustomComponent;
@@ -32,10 +33,10 @@ import java.util.Objects;
 public class StepLabel extends CustomComponent
     implements Component, LayoutEvents.LayoutClickNotifier {
 
-  public static final FontIcon DEFAULT_ICON_NEXTED = FontAwesome.CHECK;
-  public static final FontIcon DEFAULT_ICON_SKIPPED = FontAwesome.CHECK;
-  public static final FontIcon DEFAULT_ICON_EDITABLE = FontAwesome.PENCIL;
-  public static final FontIcon DEFAULT_ICON_ERROR = FontAwesome.WARNING;
+  public static final FontIcon DEFAULT_ICON_NEXTED = VaadinIcons.CHECK;
+  public static final FontIcon DEFAULT_ICON_SKIPPED = VaadinIcons.CHECK;
+  public static final FontIcon DEFAULT_ICON_EDITABLE = VaadinIcons.PENCIL;
+  public static final FontIcon DEFAULT_ICON_ERROR = VaadinIcons.WARNING;
 
   private static final String STYLE_ROOT_LAYOUT = "step-label";
   private static final String STYLE_STEP_ICON = "step-icon";
@@ -156,27 +157,16 @@ public class StepLabel extends CustomComponent
   }
 
   @Override
-  public void addLayoutClickListener(LayoutEvents.LayoutClickListener listener) {
+  public Registration addLayoutClickListener(LayoutEvents.LayoutClickListener listener) {
     Objects.requireNonNull(listener, "listener may not be null");
-    rootLayout.addLayoutClickListener(listener);
+    return rootLayout.addLayoutClickListener(listener);
   }
 
-  @Override
-  public void addListener(LayoutEvents.LayoutClickListener listener) {
-    Objects.requireNonNull(listener, "listener may not be null");
-    rootLayout.addListener(listener);
-  }
-
+  @Deprecated
   @Override
   public void removeLayoutClickListener(LayoutEvents.LayoutClickListener listener) {
     Objects.requireNonNull(listener, "listener may not be null");
     rootLayout.removeLayoutClickListener(listener);
-  }
-
-  @Override
-  public void removeListener(LayoutEvents.LayoutClickListener listener) {
-    Objects.requireNonNull(listener, "listener may not be null");
-    rootLayout.removeListener(listener);
   }
 
   @Override
