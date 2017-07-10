@@ -1,0 +1,7 @@
+@import "../valo/valo.scss";
+@import "addons";
+
+.default {
+  @include valo;
+  @include addons;
+}

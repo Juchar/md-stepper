@@ -1,0 +1,216 @@
+//noinspection ALL
+@mixin md-stepper() {
+
+  /*------------ GENERAL ------------*/
+  .centered-layout {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  $background-color: $v-background-color;
+  $bevel: $v-bevel;
+  $shadow: $v-shadow;
+  $base-size: $v-unit-size * 1;
+  $icon-size: $base-size;
+
+  $border: $v-panel-border;
+  $divider-color: first-color(valo-border($border: $border, $color: darkest-color($background-color, $v-app-background-color), $strength: 0.7));
+  $divider-thickness: first-number(valo-border($border: $border, $color: darkest-color($background-color, $v-app-background-color), $strength: 0.7));
+  $border-radius: $v-border-radius;
+
+  /*------------ STEP-LABEL ------------*/
+  .step-label {
+    height: $base-size + $v-layout-margin-top * 0.25 + $v-layout-margin-bottom * 0.25;
+    padding: $v-layout-margin-top * 0.25 $v-layout-margin-right * 0.25 $v-layout-margin-bottom * 0.25 $v-layout-margin-left * 0.25;
+    border-radius: $border-radius;
+
+    .step-icon {
+      width: $icon-size;
+      height: $icon-size;
+      margin-right: $v-layout-margin-right * 0.25;
+      text-align: center;
+
+      @if ($icon-size % 2) != 0px {
+        text-indent: 0.5px;
+      }
+
+      background: valo-font-color($background-color, .5);
+      color: valo-font-color(valo-font-color($background-color, .5), 0.9);
+
+      border-radius: 50%;
+
+      &:before {
+        content: "";
+        display: inline-block;
+        height: 100%;
+        vertical-align: middle;
+        width: 0;
+      }
+
+      .v-icon {
+        line-height: $icon-size;
+      }
+    }
+
+    .step-caption, .step-description {
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+
+    :not(.single-label).step-caption {
+      margin-top: (($v-line-height - 1) / 2) * -1em;
+    }
+
+    &.active {
+      .step-icon {
+        background: $v-selection-color;
+        color: valo-font-color($v-selection-color, 0.9);
+      }
+
+      .step-caption {
+        font-weight: bold;
+        color: $v-selection-color;
+      }
+    }
+
+    &.nexted {
+      .step-icon {
+        background: $v-selection-color;
+        color: valo-font-color($v-selection-color, 0.9);
+      }
+    }
+
+    &.error {
+      .step-icon {
+        background: transparent;
+        color: $v-error-indicator-color;
+      }
+
+      .step-caption, .step-description {
+        color: $v-error-indicator-color;
+      }
+    }
+
+    &.clickable:not(.v-disabled) {
+      $bg: darken($background-color, 25%);
+      @if is-dark-color($background-color) {
+        $bg: lighten($background-color, 15%);
+      }
+
+      &:hover {
+        cursor: pointer;
+        background-color: rgba($bg, .3);
+      }
+
+      &:active {
+        background-color: rgba($bg, .4);
+      }
+    }
+  }
+
+  /*------------ STEPPERS ------------*/
+  .stepper-horizontal, .stepper-vertical {
+    @include valo-panel-style($primary-stylename: v-stepper, $background-color: $v-panel-background-color, $shadow: $shadow, $border: $border, $border-radius: $border-radius);
+
+    &.borderless {
+      background: transparent;
+      color: inherit;
+      border: none;
+      border-radius: 0;
+      @include box-shadow(none);
+    }
+  }
+
+  .stepper-horizontal .label-bar,
+  .stepper-vertical .stepper-vertical-row {
+    .feedback-message {
+      height: $base-size + $v-layout-margin-top * 0.25 + $v-layout-margin-bottom * 0.25;
+      padding: $v-layout-margin-top * 0.25 $v-layout-margin-right * 0.25 $v-layout-margin-bottom * 0.25 $v-layout-margin-left * 0.25;
+      line-height: $base-size;
+
+      @include animation(valo-animate-in-fade 400ms, valo-animate-in-slide-up 200ms 0ms);
+
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+  }
+
+  .stepper-horizontal.label-icons-square .label-bar,
+  .stepper-vertical.label-icons-square .stepper-vertical-row {
+    .step-label .step-icon {
+      border-radius: $border-radius;
+    }
+  }
+
+  .stepper-horizontal.label-icons-circular .label-bar,
+  .stepper-vertical.label-icons-circular .stepper-vertical-row {
+    .step-label .step-icon {
+      border-radius: 50%;
+    }
+  }
+
+  /*------------ HORIZONTAL STEPPER ------------*/
+  .stepper-horizontal {
+    .label-bar {
+      @include valo-panel-caption-style($background-color: $background-color, $bevel: $bevel, $gradient: valo-gradient-style($v-gradient) valo-gradient-opacity($v-gradient)/4, $border: $border);
+
+      height: $base-size + ($v-layout-margin-top * 0.25 * 2) + ($v-layout-margin-bottom * 0.25 * 2);
+      padding: $v-unit-size /3;
+      border-top-left-radius: $v-border-radius;
+      border-top-right-radius: $v-border-radius;
+      line-height: inherit;
+      font-size: inherit;
+      font-weight: inherit;
+
+      .label-divider {
+        height: $divider-thickness;
+        background: $divider-color;
+      }
+    }
+
+    .button-bar {
+      padding-left: $v-unit-size /3;
+      padding-right: $v-unit-size /3;
+    }
+
+    .button-bar {
+      padding-bottom: $v-unit-size /3;
+    }
+
+    &.borderless, &.no-divider {
+      .label-bar {
+        background: transparent;
+        color: inherit;
+        @include box-shadow(none);
+      }
+    }
+
+    &.no-divider .label-bar {
+      border-bottom: none;
+    }
+  }
+
+  /*------------ VERTICAL STEPPER ------------*/
+  .stepper-vertical {
+    padding: $v-unit-size/3;
+
+    .stepper-vertical-row {
+      .label-divider {
+        width: $divider-thickness;
+        background: $divider-color;
+        margin-left: $v-layout-margin-left * 0.25 + $icon-size / 2 - 0.5px;
+        margin-right: $v-layout-margin-right * 0.25 + $icon-size / 2 - 0.5px;
+        height: $icon-size;
+      }
+
+      .content-container {
+        margin-left: $v-unit-size/3 * -1;
+        margin-right: $v-unit-size/3 * -1;
+        width: calc(100% + #{($v-unit-size/3) * 2}) !important;
+      }
+    }
+  }
+}
