@@ -1,6 +1,5 @@
 package org.vaadin.addons.md_stepper.demo;
 
-import com.vaadin.server.FontAwesome;
 import com.vaadin.server.Page;
 import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.ComboBox;
@@ -15,11 +14,9 @@ import com.vaadin.util.ReflectTools;
 
 import org.vaadin.addons.md_stepper.AbstractStepper;
 import org.vaadin.addons.md_stepper.HorizontalStepper;
-import org.vaadin.addons.md_stepper.StepLabel;
 import org.vaadin.addons.md_stepper.VerticalStepper;
 import org.vaadin.addons.md_stepper.demo.StepperPropertiesLayout.StepperCreateListener
            .StepperCreateEvent;
-import org.vaadin.addons.md_stepper.util.SerializableSupplier;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
@@ -169,7 +166,7 @@ public class StepperPropertiesLayout extends CustomComponent {
     comboBox.setWidth(100, Unit.PERCENTAGE);
     comboBox.setValue("Default");
     comboBox.addValueChangeListener(e -> {
-      Object value = e.getProperty().getValue();
+      Object value = e.getValue();
       String theme = value != null ? String.valueOf(value) : "";
       if (!"".equals(theme.trim())) {
         getUI().setTheme(theme.toLowerCase());
@@ -184,7 +181,7 @@ public class StepperPropertiesLayout extends CustomComponent {
 
     ComboBox comboBox = new ComboBox("Stepper Type *", stepperTypes);
     comboBox.setWidth(100, Unit.PERCENTAGE);
-    comboBox.setValue(comboBox.getItemIds().iterator().next());
+    comboBox.setValue(stepperTypes.get(0));
     comboBox.addValueChangeListener(event -> {
       createStepper();
       fireEvent(new StepperCreateEvent(StepperPropertiesLayout.this, stepper));
