@@ -92,6 +92,8 @@ public class VerticalStepper extends AbstractStepper
     this.rootLayout = new VerticalLayout();
     this.rootLayout.setDefaultComponentAlignment(Alignment.TOP_LEFT);
     this.rootLayout.setSizeFull();
+    this.rootLayout.setMargin(false);
+    this.rootLayout.setSpacing(false);
 
     setCompositionRoot(rootLayout);
     addStyleName(STYLE_ROOT_LAYOUT);
@@ -244,12 +246,15 @@ public class VerticalStepper extends AbstractStepper
 
       buttonBar = new HorizontalLayout();
       buttonBar.addStyleName(STYLE_BUTTON_BAR);
+      buttonBar.setMargin(false);
       buttonBar.setSpacing(true);
       buttonBar.setWidth(100, Unit.PERCENTAGE);
       buttonBar.setMargin(new MarginInfo(false, false, !isLastStep(step), false));
 
       rootLayout = new GridLayout(2, 3);
       rootLayout.setSizeFull();
+      rootLayout.setMargin(false);
+      rootLayout.setSpacing(false);
       rootLayout.setColumnExpandRatio(1, 1);
       rootLayout.setRowExpandRatio(1, 1);
       rootLayout.addComponent(label, 0, 0, 1, 0);

@@ -106,11 +106,14 @@ public class HorizontalStepper extends AbstractStepper
     this.labelBar.setDefaultComponentAlignment(Alignment.MIDDLE_LEFT);
     this.labelBar.setWidth(100, Unit.PERCENTAGE);
     this.labelBar.addStyleName(STYLE_LABEL_BAR);
+    this.labelBar.setMargin(false);
+    this.labelBar.setSpacing(false);
 
     this.buttonBar = new HorizontalLayout();
     this.buttonBar.setDefaultComponentAlignment(Alignment.MIDDLE_LEFT);
     this.buttonBar.addStyleName(STYLE_BUTTON_BAR);
     this.buttonBar.setWidth(100, Unit.PERCENTAGE);
+    this.buttonBar.setMargin(false);
     this.buttonBar.setSpacing(true);
 
     this.stepContent = new Panel();
@@ -123,6 +126,7 @@ public class HorizontalStepper extends AbstractStepper
     VerticalLayout rootLayout = new VerticalLayout();
     rootLayout.setDefaultComponentAlignment(Alignment.MIDDLE_LEFT);
     rootLayout.setSizeFull();
+    rootLayout.setMargin(false);
     rootLayout.setSpacing(true);
     rootLayout.addComponent(labelBar);
     rootLayout.addComponent(stepContent);
