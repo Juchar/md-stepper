@@ -19,7 +19,6 @@ import javax.servlet.annotation.WebServlet;
 
 @Theme("default")
 @Title("Stepper Add-on Demo")
-@Push
 @SuppressWarnings("serial")
 public class DemoUI extends UI implements StepperPropertiesLayout.StepperCreateListener {
 
