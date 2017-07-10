@@ -1,14 +1,11 @@
 package org.vaadin.addons.md_stepper.demo;
 
-import com.vaadin.annotations.Push;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Title;
 import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
-import com.vaadin.shared.communication.PushMode;
 import com.vaadin.shared.ui.MarginInfo;
-import com.vaadin.shared.ui.ui.Transport;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.Label;
@@ -21,7 +18,6 @@ import javax.servlet.annotation.WebServlet;
 
 @Theme("default")
 @Title("Stepper Add-on Demo")
-@Push(transport = Transport.LONG_POLLING)
 @SuppressWarnings("serial")
 public class DemoUI extends UI implements StepperPropertiesLayout.StepperCreateListener {
 
