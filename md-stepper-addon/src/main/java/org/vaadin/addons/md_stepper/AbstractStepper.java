@@ -214,10 +214,6 @@ public abstract class AbstractStepper extends CustomComponent
   public void showFeedbackMessage(String message) {
     feedbackMessage = message;
 
-    if (message == null) {
-      setActive(getCurrent());
-    }
-
     notifyStepperFeedback(message);
   }
 
@@ -255,9 +251,9 @@ public abstract class AbstractStepper extends CustomComponent
       step.getNextButton().addClickListener(onNextClicked);
       step.getSkipButton().addClickListener(onSkipClicked);
       step.getCancelButton().addClickListener(onCancelClicked);
+      labelProvider.setActive(step);
 
       if (fireEvent) {
-        labelProvider.setActive(step);
         step.notifyActive(this);
       }
     }

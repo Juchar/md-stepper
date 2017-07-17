@@ -161,6 +161,10 @@ public class VerticalStepper extends AbstractStepper
   public void showFeedbackMessage(String message) {
     super.showFeedbackMessage(message);
 
+    if (message == null) {
+      setActive(getCurrent(), false);
+    }
+
     rowMap.values()
           .stream()
           .filter(RowLayout::isActive)
@@ -170,8 +174,6 @@ public class VerticalStepper extends AbstractStepper
 
   @Override
   protected void setActive(Step step, boolean fireEvent) {
-    super.setActive(step, fireEvent);
-
     if (spacer != null) {
       rootLayout.setExpandRatio(spacer, step != null ? 0 : 1);
     }
@@ -188,6 +190,8 @@ public class VerticalStepper extends AbstractStepper
         rootLayout.setExpandRatio(layout, 0);
       }
     });
+
+    super.setActive(step, fireEvent);
   }
 
   @Override
