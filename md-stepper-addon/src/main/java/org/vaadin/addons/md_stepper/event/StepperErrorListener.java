@@ -1,5 +1,6 @@
 package org.vaadin.addons.md_stepper.event;
 
+import org.vaadin.addons.md_stepper.Step;
 import org.vaadin.addons.md_stepper.Stepper;
 
 /**
@@ -20,6 +21,7 @@ public interface StepperErrorListener extends StepperListener {
    */
   class StepperErrorEvent extends StepperEvent {
 
+    private final Step step;
     private final Throwable error;
 
     /**
@@ -27,12 +29,17 @@ public interface StepperErrorListener extends StepperListener {
      *
      * @param source
      *     The object on which the Event initially occurred.
+     * @param step
+     *     The step the error is shown for
+     * @param error
+     *     The error that is shown
      *
      * @throws IllegalArgumentException
      *     if source is null.
      */
-    public StepperErrorEvent(Stepper source, Throwable error) {
+    public StepperErrorEvent(Stepper source, Step step, Throwable error) {
       super(source);
+      this.step = step;
       this.error = error;
     }
 
@@ -43,6 +50,15 @@ public interface StepperErrorListener extends StepperListener {
      */
     public Throwable getError() {
       return error;
+    }
+
+    /**
+     * The step the error is shown for.
+     *
+     * @return The step
+     */
+    public Step getStep() {
+      return step;
     }
   }
 }

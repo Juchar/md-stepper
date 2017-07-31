@@ -20,6 +20,8 @@ import org.vaadin.addons.md_stepper.event.StepCompleteListener.StepCompleteEvent
 import org.vaadin.addons.md_stepper.event.StepNextListener;
 import org.vaadin.addons.md_stepper.event.StepNextListener.StepNextEvent;
 import org.vaadin.addons.md_stepper.event.StepNotifier;
+import org.vaadin.addons.md_stepper.event.StepResetListener;
+import org.vaadin.addons.md_stepper.event.StepResetListener.StepResetEvent;
 import org.vaadin.addons.md_stepper.event.StepSkipListener;
 import org.vaadin.addons.md_stepper.event.StepSkipListener.StepSkipEvent;
 import org.vaadin.addons.md_stepper.event.StepperActions;
@@ -46,6 +48,7 @@ public class Step extends CustomComponent
 
   private final Collection<StepActiveListener> stepActiveListeners;
   private final Collection<StepCompleteListener> stepCompleteListeners;
+  private final Collection<StepResetListener> stepResetListeners;
   private final Collection<StepBackListener> stepBackListeners;
   private final Collection<StepNextListener> stepNextListeners;
   private final Collection<StepSkipListener> stepSkipListeners;
@@ -63,6 +66,7 @@ public class Step extends CustomComponent
   private boolean optional;
   private boolean editable;
   private boolean cancellable;
+  private boolean resetOnResubmit;
 
   private Button backButton;
   private Button nextButton;
@@ -92,6 +96,7 @@ public class Step extends CustomComponent
   public Step(boolean defaultActions) {
     this.stepActiveListeners = new HashSet<>();
     this.stepCompleteListeners = new HashSet<>();
+    this.stepResetListeners = new HashSet<>();
     this.stepBackListeners = new HashSet<>();
     this.stepNextListeners = new HashSet<>();
     this.stepSkipListeners = new HashSet<>();
@@ -109,6 +114,7 @@ public class Step extends CustomComponent
     this.optional = false;
     this.editable = false;
     this.cancellable = false;
+    this.resetOnResubmit = false;
 
     this.backButton = createBackButton();
     this.nextButton = createNextButton();
@@ -269,6 +275,18 @@ public class Step extends CustomComponent
   }
 
   @Override
+  public boolean addStepResetListener(StepResetListener listener) {
+    Objects.requireNonNull(listener, "Listener may not be null");
+    return stepResetListeners.add(listener);
+  }
+
+  @Override
+  public boolean removeStepResetListener(StepResetListener listener) {
+    Objects.requireNonNull(listener, "Listener may not be null");
+    return stepResetListeners.remove(listener);
+  }
+
+  @Override
   public boolean addStepBackListener(StepBackListener listener) {
     Objects.requireNonNull(listener, "Listener may not be null");
     return stepBackListeners.add(listener);
@@ -328,10 +346,10 @@ public class Step extends CustomComponent
     return stepActiveListeners.remove(listener);
   }
 
-  public void notifyActive(Stepper stepper) {
+  public void notifyActive(Stepper stepper, Step previousStep) {
     Objects.requireNonNull(stepper, "Stepper may not be null");
 
-    StepActiveEvent activeEvent = new StepActiveEvent(stepper, this);
+    StepActiveEvent activeEvent = new StepActiveEvent(stepper, this, previousStep);
     stepActiveListeners.forEach(l -> l.onStepActive(activeEvent));
   }
 
@@ -340,6 +358,13 @@ public class Step extends CustomComponent
 
     StepCompleteEvent event = new StepCompleteEvent(stepper, this);
     stepCompleteListeners.forEach(l -> l.onStepComplete(event));
+  }
+
+  public void notifyReset(Stepper stepper) {
+    Objects.requireNonNull(stepper, "Stepper may not be null");
+
+    StepResetEvent event = new StepResetEvent(stepper, this);
+    stepResetListeners.forEach(l -> l.onStepReset(event));
   }
 
   public void notifyBack(Stepper stepper) {
@@ -506,6 +531,27 @@ public class Step extends CustomComponent
 
   public void setOptional(boolean optional) {
     this.optional = optional;
+  }
+
+  /**
+   * Check whether the step will reset the submission of follow up steps in a linear stepper once it
+   * is submitted.
+   *
+   * @return <code>true</code> if it resets, <code>false</code> else
+   */
+  public boolean isResetOnResubmit() {
+    return resetOnResubmit;
+  }
+
+  /**
+   * Set whether the step will reset the submission of follow up steps in a linear stepper once it
+   * is submitted.
+   *
+   * @param resetOnResubmit
+   *     <code>true</code> if it resets, <code>false</code> else
+   */
+  public void setResetOnResubmit(boolean resetOnResubmit) {
+    this.resetOnResubmit = resetOnResubmit;
   }
 
   /**

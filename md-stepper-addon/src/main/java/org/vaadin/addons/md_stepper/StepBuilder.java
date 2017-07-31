@@ -35,6 +35,7 @@ public final class StepBuilder {
   private boolean optional;
   private boolean editable;
   private boolean cancellable;
+  private boolean resetOnResubmit;
   private boolean defaultActions;
 
   private Button backButton;
@@ -78,6 +79,11 @@ public final class StepBuilder {
 
   public StepBuilder withEditable(boolean editable) {
     this.editable = editable;
+    return this;
+  }
+
+  public StepBuilder withResetOnResubmit(boolean resetOnResubmit) {
+    this.resetOnResubmit = resetOnResubmit;
     return this;
   }
 
@@ -156,6 +162,7 @@ public final class StepBuilder {
     step.setIcon(icon);
     step.setOptional(optional);
     step.setEditable(editable);
+    step.setResetOnResubmit(resetOnResubmit);
     step.setCancellable(cancellable);
     step.setBackButton(backButton);
     step.setNextButton(nextButton);

@@ -143,7 +143,7 @@ public class LabelProvider
 
   @Override
   public void onStepperError(StepperErrorEvent event) {
-    setError(event.getSource().getCurrent(), event.getError());
+    setError(event.getStep(), event.getError());
   }
 
   /**

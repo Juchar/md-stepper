@@ -74,7 +74,17 @@ public interface Stepper {
   void showError(Throwable throwable);
 
   /**
-   * Hide the currently visible error.
+   * Show the given error for the specified step.
+   *
+   * @param step
+   *     The step to show the error for
+   * @param throwable
+   *     The error to show
+   */
+  void showError(Step step, Throwable throwable);
+
+  /**
+   * Hide the error for the current step.
    * <p>
    * Convenience method for calling {@link #showError(Throwable)} with <code>null</code> as
    * parameter.
@@ -82,11 +92,26 @@ public interface Stepper {
   void hideError();
 
   /**
+   * Hide the error for the specified step.
+   * <p>
+   * Convenience method for calling {@link #showError(Step, Throwable)} with <code>null</code> as
+   * parameter.
+   */
+  void hideError(Step step);
+
+  /**
    * Get the error for the current step.
    *
    * @return The error
    */
   Throwable getError();
+
+  /**
+   * Get the error for the specified step.
+   *
+   * @return The error
+   */
+  Throwable getError(Step step);
 
   /**
    * Show the given feedback message.

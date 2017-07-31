@@ -18,8 +18,10 @@ import org.vaadin.addons.md_stepper.event.StepperNotifier;
 import org.vaadin.addons.md_stepper.iterator.ElementChangeListener;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -39,6 +41,7 @@ public abstract class AbstractStepper extends CustomComponent
 
   private final StepIterator stepIterator;
   private final LabelProvider labelProvider;
+  private final Map<Step, Throwable> errorMap;
 
   private final Button.ClickListener onBackClicked;
   private final Button.ClickListener onNextClicked;
@@ -46,7 +49,6 @@ public abstract class AbstractStepper extends CustomComponent
   private final Button.ClickListener onCancelClicked;
 
   private String feedbackMessage;
-  private Throwable error;
 
   /**
    * Construct a new instance of the stepper.
@@ -63,6 +65,7 @@ public abstract class AbstractStepper extends CustomComponent
     this.stepperCompleteListeners = new HashSet<>();
     this.stepperErrorListeners = new HashSet<>();
     this.stepperFeedbackListeners = new HashSet<>();
+    this.errorMap = new HashMap<>();
     this.labelProvider = labelProvider;
 
     this.onBackClicked = e -> getCurrent().notifyBack(this);
@@ -164,10 +167,25 @@ public abstract class AbstractStepper extends CustomComponent
     labelProvider.setCompleted(current, true);
     current.notifyComplete(this);
 
+    resetStepsIfNeeded(current);
+
     if (stepIterator.hasNext()) {
       stepIterator.next();
     } else {
       notifyStepperComplete();
+    }
+  }
+
+  private void resetStepsIfNeeded(Step current) {
+    if (stepIterator.isLinear() && current.isResetOnResubmit()) {
+      List<Step> steps = stepIterator.getSteps();
+      steps.stream()
+           .skip(steps.indexOf(current) + 1)
+           .filter(stepIterator::isStepComplete)
+           .forEach(step -> {
+             labelProvider.setCompleted(step, false);
+             step.notifyReset(this);
+           });
     }
   }
 
@@ -179,6 +197,8 @@ public abstract class AbstractStepper extends CustomComponent
     labelProvider.setSkipped(current, true);
     current.notifyComplete(this);
 
+    resetStepsIfNeeded(current);
+
     if (stepIterator.hasSkip()) {
       stepIterator.skip();
     } else {
@@ -188,26 +208,40 @@ public abstract class AbstractStepper extends CustomComponent
 
   @Override
   public void showError(Throwable throwable) {
-    Objects.requireNonNull(getCurrent(), "No current step specified");
+    showError(getCurrent(), throwable);
+  }
 
-    error = throwable;
+  @Override
+  public void showError(Step step, Throwable throwable) {
+    Objects.requireNonNull(step, "No current step specified");
 
-    notifyStepperError(throwable);
+    if (throwable != null) {
+      errorMap.put(step, throwable);
+    } else {
+      errorMap.remove(step);
+    }
+
+    notifyStepperError(step, throwable);
   }
 
   @Override
   public void hideError() {
-    showError(null);
+    hideError(getCurrent());
   }
 
-  private void notifyStepperError(Throwable throwable) {
-    StepperErrorEvent errorEvent = new StepperErrorEvent(this, throwable);
-    stepperErrorListeners.forEach(l -> l.onStepperError(errorEvent));
+  @Override
+  public void hideError(Step step) {
+    showError(step, null);
   }
 
   @Override
   public Throwable getError() {
-    return error;
+    return getError(getCurrent());
+  }
+
+  @Override
+  public Throwable getError(Step step) {
+    return errorMap.get(step);
   }
 
   @Override
@@ -222,46 +256,19 @@ public abstract class AbstractStepper extends CustomComponent
     showFeedbackMessage(null);
   }
 
-  /**
-   * Set the given step to be the active step.
-   *
-   * @param step
-   *     The step to be active
-   */
-  protected void setActive(Step step) {
-    setActive(step, true);
-  }
-
   private void notifyStepperFeedback(String message) {
     StepperFeedbackEvent feedbackEvent = new StepperFeedbackEvent(this, message);
     stepperFeedbackListeners.forEach(l -> l.onStepperFeedback(feedbackEvent));
   }
 
-  /**
-   * Set the given step to be the active step.
-   *
-   * @param step
-   *     The step to be active
-   * @param fireEvent
-   *     <code>true</code> if an event should be fired, <code>false</code> else
-   */
-  protected void setActive(Step step, boolean fireEvent) {
-    if (step != null) {
-      step.getBackButton().addClickListener(onBackClicked);
-      step.getNextButton().addClickListener(onNextClicked);
-      step.getSkipButton().addClickListener(onSkipClicked);
-      step.getCancelButton().addClickListener(onCancelClicked);
-      labelProvider.setActive(step);
-
-      if (fireEvent) {
-        step.notifyActive(this);
-      }
-    }
-  }
-
   @Override
   public String getFeedbackMessage() {
     return feedbackMessage;
+  }
+
+  private void notifyStepperError(Step step, Throwable throwable) {
+    StepperErrorEvent errorEvent = new StepperErrorEvent(this, step, throwable);
+    stepperErrorListeners.forEach(l -> l.onStepperError(errorEvent));
   }
 
   private void notifyStepperComplete() {
@@ -289,7 +296,39 @@ public abstract class AbstractStepper extends CustomComponent
 
   @Override
   public void onElementChange(IterationEvent<Step> event) {
-    setActive(event.getCurrent());
+    setActive(event.getCurrent(), event.getPrevious());
+  }
+
+  /**
+   * Set the given step to be the active step.
+   *
+   * @param step
+   *     The step to be active
+   */
+  protected void setActive(Step step, Step previousStep) {
+    setActive(step, previousStep, true);
+  }
+
+  /**
+   * Set the given step to be the active step.
+   *
+   * @param step
+   *     The step to be active
+   * @param fireEvent
+   *     <code>true</code> if an event should be fired, <code>false</code> else
+   */
+  protected void setActive(Step step, Step previousStep, boolean fireEvent) {
+    if (step != null) {
+      step.getBackButton().addClickListener(onBackClicked);
+      step.getNextButton().addClickListener(onNextClicked);
+      step.getSkipButton().addClickListener(onSkipClicked);
+      step.getCancelButton().addClickListener(onCancelClicked);
+      labelProvider.setActive(step);
+
+      if (fireEvent) {
+        step.notifyActive(this, previousStep);
+      }
+    }
   }
 
   @Override
