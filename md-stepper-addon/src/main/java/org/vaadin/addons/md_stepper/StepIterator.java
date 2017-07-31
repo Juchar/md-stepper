@@ -6,6 +6,7 @@ import org.vaadin.addons.md_stepper.collection.ElementAddListener.ElementAddEven
 import org.vaadin.addons.md_stepper.collection.ElementRemoveListener;
 import org.vaadin.addons.md_stepper.collection.ElementRemoveListener.ElementRemoveEvent;
 import org.vaadin.addons.md_stepper.event.StepCompleteListener;
+import org.vaadin.addons.md_stepper.event.StepResetListener;
 import org.vaadin.addons.md_stepper.iterator.AbstractObservableIterator;
 import org.vaadin.addons.md_stepper.iterator.NextListener;
 import org.vaadin.addons.md_stepper.iterator.SkipListener;
@@ -27,7 +28,7 @@ import java.util.stream.Collectors;
  * Iterator that is used to iterate over steps allowing iterations based upon the steps attributes.
  */
 public class StepIterator extends AbstractObservableIterator<Step>
-    implements CollectionChangeNotifier<Step>, StepCompleteListener {
+    implements CollectionChangeNotifier<Step>, StepCompleteListener, StepResetListener {
 
   private final Collection<ElementAddListener<Step>> elementAddListeners;
   private final Collection<ElementRemoveListener<Step>> elementRemoveListeners;
@@ -183,6 +184,11 @@ public class StepIterator extends AbstractObservableIterator<Step>
   }
 
   @Override
+  public void onStepReset(StepResetEvent event) {
+    stateTracker.setState(event.getStep(), State.UNVISITED);
+  }
+
+  @Override
   public boolean addElementAddListener(ElementAddListener<Step> listener) {
     return elementAddListeners.add(listener);
   }
@@ -272,6 +278,7 @@ public class StepIterator extends AbstractObservableIterator<Step>
                                   .orElse(steps.size());
     steps.add(insertIndex, step);
     step.addStepCompleteListener(this);
+    step.addStepResetListener(this);
 
     ElementAddEvent<Step> event = new ElementAddEvent<>(steps, step);
     elementAddListeners.forEach(l -> l.onElementAdd(event));

@@ -26,6 +26,26 @@ public interface StepNotifier {
   boolean removeStepCompleteListener(StepCompleteListener listener);
 
   /**
+   * Add the given listener that is triggered if a step is reseted.
+   *
+   * @param listener
+   *     The listener to add
+   *
+   * @return <code>true</code> if the listener was successfully added, <code>false</code> else
+   */
+  boolean addStepResetListener(StepResetListener listener);
+
+  /**
+   * Remove the given listener.
+   *
+   * @param listener
+   *     The listener to remove
+   *
+   * @return <code>true</code> if the listener was successfully removed, <code>false</code> else
+   */
+  boolean removeStepResetListener(StepResetListener listener);
+
+  /**
    * Add the given listener that is triggered if the <b>back</b> action of a step is triggered.
    *
    * @param listener

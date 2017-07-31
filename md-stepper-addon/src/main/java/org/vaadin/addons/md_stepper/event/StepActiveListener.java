@@ -21,6 +21,8 @@ public interface StepActiveListener extends StepListener {
    */
   class StepActiveEvent extends StepEvent {
 
+    private final Step previousStep;
+
     /**
      * Constructs a prototypical Event.
      *
@@ -28,12 +30,24 @@ public interface StepActiveListener extends StepListener {
      *     The object on which the Event initially occurred.
      * @param step
      *     The step related to this event
+     * @param previousStep
+     *     The step that was active before this step
      *
      * @throws IllegalArgumentException
      *     if source is null.
      */
-    public StepActiveEvent(Stepper source, Step step) {
+    public StepActiveEvent(Stepper source, Step step, Step previousStep) {
       super(source, step);
+      this.previousStep = previousStep;
+    }
+
+    /**
+     * Get the step that was active before this step.
+     *
+     * @return The previous step or <code>null</code> if this is the first step activated
+     */
+    public Step getPreviousStep() {
+      return previousStep;
     }
   }
 }

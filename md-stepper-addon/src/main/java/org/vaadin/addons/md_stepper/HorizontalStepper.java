@@ -226,7 +226,7 @@ public class HorizontalStepper extends AbstractStepper
   public void refresh() {
     super.refresh();
     refreshLabelBar();
-    setActive(getCurrent(), false);
+    setActive(getCurrent(), getCurrent(), false);
   }
 
   @Override
@@ -235,7 +235,7 @@ public class HorizontalStepper extends AbstractStepper
 
     if (message == null) {
       refreshLabelBar();
-      setActive(getCurrent(), false);
+      setActive(getCurrent(), getCurrent(), false);
     } else {
       buttonBar.forEach(button -> button.setVisible(false));
       showTransitionLabel(message);
@@ -256,11 +256,11 @@ public class HorizontalStepper extends AbstractStepper
   }
 
   @Override
-  protected void setActive(Step step, boolean fireEvent) {
+  protected void setActive(Step step, Step previousStep, boolean fireEvent) {
     stepContent.setContent(step.getContent());
     refreshButtonBar(step);
 
-    super.setActive(step, fireEvent);
+    super.setActive(step, previousStep, fireEvent);
   }
 
   private void refreshButtonBar(Step step) {
@@ -311,6 +311,4 @@ public class HorizontalStepper extends AbstractStepper
       // Prevent instantiation
     }
   }
-
-
 }
