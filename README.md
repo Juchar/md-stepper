@@ -180,6 +180,9 @@ addStepNextListener(event -> {
 });
 ```
 
+The feedback functionality could be e.g. used inside a `StepActiveListener` if the loading of a step takes a long time.
+Alternatively it could also be used inside a `StepNextListener` if processing the data of a completed step takes some time.
+
 For a more detailed example, see **md-stepper-demo/src/main/org/vaadin/addons/md_stepper/demo/steps/Step3.java**
 
 #### Custom Step Label Icons
@@ -216,6 +219,10 @@ You can specify a step to be editable by using `Step#setEditable(boolean)`.
 
 If a step is marked as editable, it is possible for the user to come back to this step event it has already been completed (either by using `Stepper#skip()` or `Stepper#next()`).
 
+#### ResetOnReSubmit
+You can specify that a step that is resubmitted (e.g. because it is editable) resets all follow up steps by using `Step#setResetOnResubmit(boolean)`.
+This will only work in a linear stepper, as for non-linear stepper it can not be determined which steps to reset.
+
 #### Changing the step after stepper start
 If you want to change an attribute after the stepper has already been started you have to call `Stepper#refresh()` to see the changes reflected.
 
@@ -225,7 +232,10 @@ If you want to change an attribute after the stepper has already been started yo
 The step class provides various possibilities to listen to events.
 
 ##### StepActiveEvent
-Called whenever a step is activated and shown by the stepper.
+Called whenever a step is activated and shown by the stepper. Provides a method to access the previous step.
+
+##### StepResetEvent
+Called whenever a step is reseted.
 
 ##### StepCompleteEvent
 Called whenever a step is completed (either by using `Stepper#skip()` or `Stepper#next()`).
