@@ -4,7 +4,7 @@
   <groupId>org.vaadin.addons</groupId>
   <artifactId>md-stepper-root</artifactId>
   <packaging>pom</packaging>
-  <version>1.2-SNAPSHOT</version>
+  <version>1.2</version>
   <name>Material Design Stepper Add-on Root Project</name>
 
   <prerequisites>
@@ -32,7 +32,7 @@
     <connection>scm:git:http://github.com/Juchar/md-stepper.git</connection>
     <developerConnection>scm:git:http://git@github.com:/Juchar/md-stepper.git
     </developerConnection>
-    <tag>md-stepper-1.0</tag>
+    <tag>md-stepper-1.2</tag>
   </scm>
 
   <issueManagement>
